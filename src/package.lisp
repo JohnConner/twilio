@@ -3,7 +3,8 @@
   (:documentation "Common Lisp interface to the twilio SMS service")
   (:export
    #:*twilio-account-sid*
-   #:send-sms))
+   #:send-sms
+   #:*twilio-auth-token*))
 
 (in-package :twilio)
 

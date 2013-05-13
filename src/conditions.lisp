@@ -1,3 +1,6 @@
+(in-package :twilio)
+
+(declaim #.*compile-decl*)
 
 (define-condition twilio-error (error)
   ()
@@ -5,7 +8,12 @@
 
 (define-condition no-account-sid (twilio-error)
   ()
-  (:documentation "Error that is raised if no account SID was given"))
+  (:report "No account SID or auth code supplied")
+  (:documentation "Error that is raised if no account SID or auth code was given"))
+
+(define-condition send-error (twilio-error)
+  ()
+  (:documentation "Error that is raised when a message could not be sent"))
 
 (defun read-new-account-sid-and-token ()
   (format t "Enter new account SID: ")
@@ -18,7 +26,7 @@
 (defun check-account-sid (account token)
   (restart-case
       (if (or (null account) (null token))
-          (error 'twilio-error )
+          (error 'no-account-sid)
           (values account token))
     (specify-account (new-account-sid new-token)
       :report "Restart with different credentials"
